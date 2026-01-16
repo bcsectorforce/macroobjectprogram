@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Macro Object Program (MOP)</title>
+<title>Macro Object Program</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Professional fonts -->
@@ -42,6 +42,29 @@ header {
   background-repeat: no-repeat;
   color: #fff; /* ensures nav text is visible */
 }
+
+
+  #gameContainer{
+    display:flex;
+  }
+
+  #gameCanvas{
+    border:1px solid #ccc;
+    background:white;
+  }
+
+  #infoPanel{
+    width:300px;
+    padding:15px;
+    border-left:1px solid #ddd;
+  }
+  .modal{
+    border:1px solid #ccc;
+    padding:15px;
+    background:#fff;
+  }
+
+
 
 /* Make nav text readable on banner */
 nav .title,
@@ -139,7 +162,30 @@ button.action:hover{
 <main id="content"></main>
 
 <script>
-const content = document.getElementById("content");
+
+  let objects = JSON.parse(localStorage.getItem("mop_objects") || "[]");
+
+  function generateObject(){
+    return {
+      uid: crypto.randomUUID(),
+      x: Math.random()*5000,
+      y: Math.random()*5000,
+      vx: (Math.random()-0.5)*0.3,
+      vy: (Math.random()-0.5)*0.3,
+      mass: (Math.random()*1e12).toFixed(2),
+      density: (Math.random()*10).toFixed(2),
+      magnitude: (Math.random()*25).toFixed(2),
+      size: (Math.random()*500).toFixed(2),
+      discovered:false
+    };
+  }
+
+  while(objects.length < 500){
+    objects.push(generateObject());
+  }
+
+  
+  const content = document.getElementById("content");
 
 function loadPage(page){
   if(page==="home"){
@@ -233,20 +279,215 @@ PHAs are a subset of NEOs identified as being potentially hazardous due to their
   }
 
   if(page==="publication"){
+    const discovered = JSON.parse(localStorage.getItem("mop_discovered") || "[]");
+
     content.innerHTML = `
       <h1>Publications</h1>
-      <p>Official circulars, bulletins, and object announcements will appear here.</p>
+
+      <button id="adminBtn">Administrator Publication Clone</button>
+
+      <div id="authBox" style="display:none;margin-top:20px;">
+        <div class="modal">
+          <h3>Administrator Access</h3>
+          <input id="adminPass" type="password" placeholder="Enter password"/>
+          <button id="authSubmit">Enter</button>
+        </div>
+      </div>
+
+      <div id="gameLaunch" style="display:none;margin-top:20px;">
+        <button onclick="loadGame()">Launch Object Discovery Interface</button>
+      </div>
+
+      <h2>Discovered Objects</h2>
+      <ul>
+        ${discovered.map(o=>`
+          <li>
+            <a href="#" onclick="viewObject('${o.uid}')">
+              ${o.name} — ${o.discoveredAt}
+            </a>
+          </li>
+        `).join("")}
+      </ul>
     `;
+
+    document.getElementById("adminBtn").onclick = ()=>{
+      document.getElementById("authBox").style.display="block";
+    };
+
+    document.getElementById("authSubmit").onclick = ()=>{
+      const passValue = document.getElementById("adminPass").value;
+      if(passValue==="jameslidegenhardt"){
+        document.getElementById("gameLaunch").style.display="block";
+        document.getElementById("authBox").style.display="none";
+      } else {
+        alert("Access denied.");
+      }
+    };
   }
 }
 
-function downloadHTML(){
+  function showPanel(o){
+    const panel = document.getElementById("infoPanel");
+    panel.innerHTML = `
+      <h3>Object Data</h3>
+      <p>Mass: ${o.mass}</p>
+      <p>Density: ${o.density}</p>
+      <p>Magnitude: ${o.magnitude}</p>
+      <p>Size: ${o.size}</p>
+
+      <input id="objName" placeholder="Object ID"/>
+      <button onclick="publishObject('${o.uid}')">Publish</button>
+    `;
+  }
+
+  function publishObject(uid){
+    const o = objects.find(x=>x.uid===uid);
+    const name = document.getElementById("objName").value;
+
+    o.discovered = true;
+    o.name = name;
+    o.discoveredAt = new Date().toLocaleString();
+
+    localStorage.setItem("mop_objects", JSON.stringify(objects));
+
+    const list = JSON.parse(localStorage.getItem("mop_discovered") || "[]");
+    list.push(o);
+    localStorage.setItem("mop_discovered", JSON.stringify(list));
+  }
+
+  
+  function viewObject(uid){
+    const o = JSON.parse(localStorage.getItem("mop_discovered"))
+      .find(x=>x.uid===uid);
+
+    content.innerHTML = `
+      <h1>${o.name}</h1>
+      <table border="1" cellpadding="6">
+        <tr><td>Mass</td><td>${o.mass}</td></tr>
+        <tr><td>Density</td><td>${o.density}</td></tr>
+        <tr><td>Magnitude</td><td>${o.magnitude}</td></tr>
+        <tr><td>Size</td><td>${o.size}</td></tr>
+        <tr><td>Discovered</td><td>${o.discoveredAt}</td></tr>
+      </table>
+    `;
+  }
+
+  
+  function startGame(){
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      objects.forEach(o=>{
+        o.x += o.vx;
+        o.y += o.vy;
+
+        ctx.fillStyle = o.discovered ? "blue" : "gray";
+        ctx.beginPath();
+        ctx.arc(o.x%2000, o.y%2000, 4, 0, Math.PI*2);
+        ctx.fill();
+
+        if(o.discovered){
+          ctx.strokeStyle="blue";
+          ctx.beginPath();
+          ctx.moveTo(o.x%2000, o.y%2000);
+          ctx.lineTo((o.x-o.vx*20)%2000, (o.y-o.vy*20)%2000);
+          ctx.stroke();
+        }
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    canvas.onclick = e=>{
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const found = objects.find(o =>
+        Math.hypot(o.x%2000-x, o.y%2000-y) < 6
+      );
+
+      if(found && !found.discovered){
+        showPanel(found);
+      }
+    };
+
+    draw();
+  }
+
+  
+  function downloadHTML(){
   const blob = new Blob([document.documentElement.outerHTML], {type:"text/html"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "index.html";
   a.click();
 }
+
+
+  function loadGame(){
+    content.innerHTML = `
+      <div id="gameContainer">
+        <canvas id="gameCanvas" width="2000" height="2000" style="width:2000px; height:2000px;"></canvas>
+        <div id="infoPanel"></div>
+      </div>
+    `;
+    startGame();
+    const gameContainer = document.getElementById('gameContainer');
+    let isDragging = false;
+    let lastX, lastY;
+
+    gameContainer.addEventListener('mousedown', e => {
+      isDragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      document.body.classList.add('lock-scroll');
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      document.body.classList.remove('lock-scroll');
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = lastX - e.clientX;
+      const dy = lastY - e.clientY;
+      gameContainer.scrollLeft += dx;
+      gameContainer.scrollTop += dy;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    });
+
+    // Touch support
+    gameContainer.addEventListener('touchstart', e => {
+      isDragging = true;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+      document.body.classList.add('lock-scroll');
+    }, { passive: false });
+
+    gameContainer.addEventListener('touchend', () => {
+      isDragging = false;
+      document.body.classList.remove('lock-scroll');
+    }, { passive: false });
+
+    gameContainer.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      e.preventDefault(); // Prevent body scroll
+      const dx = lastX - e.touches[0].clientX;
+      const dy = lastY - e.touches[0].clientY;
+      gameContainer.scrollLeft += dx;
+      gameContainer.scrollTop += dy;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+    }, { passive: false });
+
+  }
+
 
 loadPage("home");
 </script>
