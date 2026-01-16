@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Macro Object Program (MOP)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Professional fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --accent-blue:#1f4fd8;
+  --accent-amber:#d39c2c;
+  --text-main:#111;
+  --text-muted:#555;
+  --border-light:#e0e0e0;
+  --bg:#ffffff;
+}
+
+body{
+  margin:0;
+  font-family:"Inter", system-ui, sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+
+header{
+  border-bottom:1px solid var(--border-light);
+  padding:18px 40px;
+}
+
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+nav .title{
+  font-family:"Source Serif 4", serif;
+  font-size:22px;
+  font-weight:600;
+}
+
+nav .links button{
+  background:none;
+  border:none;
+  margin-left:28px;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  color:var(--text-main);
+}
+
+nav .links button:hover{
+  color:var(--accent-blue);
+}
+
+main{
+  padding:50px 80px;
+  max-width:1200px;
+}
+
+h1{
+  font-family:"Source Serif 4", serif;
+  font-size:34px;
+  margin-bottom:14px;
+}
+
+h2{
+  font-family:"Source Serif 4", serif;
+  margin-top:40px;
+}
+
+p{
+  line-height:1.7;
+  color:var(--text-muted);
+  max-width:850px;
+}
+
+ul{
+  margin-top:25px;
+  line-height:1.8;
+}
+
+a{
+  color:var(--accent-blue);
+  text-decoration:none;
+}
+
+a:hover{
+  text-decoration:underline;
+}
+
+button.action{
+  margin-top:18px;
+  padding:10px 18px;
+  border:1px solid var(--border-light);
+  background:#f8f8f8;
+  cursor:pointer;
+  font-size:14px;
+}
+
+button.action:hover{
+  border-color:var(--accent-amber);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <nav>
+    <div class="title">Macro Object Program</div>
+    <div class="links">
+      <button onclick="loadPage('home')">Home</button>
+      <button onclick="loadPage('observers')">Observers</button>
+      <button onclick="loadPage('documentation')">Documentation</button>
+      <button onclick="loadPage('publication')">Publication</button>
+    </div>
+  </nav>
+</header>
+
+<main id="content"></main>
+
+<script>
+const content = document.getElementById("content");
+
+function loadPage(page){
+  if(page==="home"){
+    content.innerHTML = `
+      <h1>Macro Object Program (MOP)</h1>
+      <p>
+        The Macro Object Program is a professional-grade database
+        It serves as a centralized system for cataloging, tracking, publishing,
+        and analyzing observations of small and large solar system bodies.
+      </p>
+      <p>
+        This project emphasizes scientific rigor, institutional structure,
+        and workflows, providing real-world orbital data systems.
+      </p>
+    `;
+  }
+
+  if(page==="observers"){
+    content.innerHTML = `
+      <h1>Recognized Observers & Data Contributors</h1>
+      <p>Organizations contributing observational data and analysis.</p>
+      <ul>
+        <li><a href="https://www.nasa.gov" target="_blank">NASA</a></li>
+        <li><a href="https://www.esa.int" target="_blank">European Space Agency (ESA)</a></li>
+        <li><a href="https://www.spacex.com" target="_blank">SpaceX</a></li>
+        <li><a href="https://www.jpl.nasa.gov" target="_blank">NASA Jet Propulsion Laboratory</a></li>
+        <li><a href="https://minorplanetcenter.net" target="_blank">Minor Planet Center</a></li>
+        <li><a href="https://www.noirlab.edu" target="_blank">NSF NOIRLab</a></li>
+        <li><a href="https://www.caltech.edu" target="_blank">Caltech</a></li>
+        <li><a href="https://www.cfa.harvard.edu" target="_blank">Center for Astrophysics | Harvard & Smithsonian</a></li>
+        <li><a href="https://www.lsst.org" target="_blank">Vera Rubin Observatory (LSST)</a></li>
+        <li><a href="https://www.eso.org" target="_blank">European Southern Observatory</a></li>
+        <li><a href="https://www.lockheedmartin.com" target="_blank">Lockheed Martin Space</a></li>
+        <li><a href="https://www.northropgrumman.com" target="_blank">Northrop Grumman</a></li>
+        <li><a href="https://www.blueorigin.com" target="_blank">Blue Origin</a></li>
+        <li><a href="https://www.planetary.org" target="_blank">The Planetary Society</a></li>
+        <li><a href="https://www.seti.org" target="_blank">SETI Institute</a></li>
+        <li><a href="https://www.usgs.gov" target="_blank">US Geological Survey Astrogeology</a></li>
+        <li><a href="https://www.iau.org" target="_blank">International Astronomical Union</a></li>
+        <li><a href="https://www.wgsbn-iau.org" target="_blank">IAU WGSBN</a></li>
+        <li><a href="https://www.asu.edu" target="_blank">Arizona State University</a></li>
+        <li><a href="https://www.stsci.edu" target="_blank">Space Telescope Science Institute</a></li>
+        <li><a href="https://www.nrao.edu" target="_blank">National Radio Astronomy Observatory</a></li>
+        <li><a href="https://www.aura-astronomy.org" target="_blank">AURA</a></li>
+        <li><a href="https://www.keckobservatory.org" target="_blank">W. M. Keck Observatory</a></li>
+        <li><a href="https://www.ctio.noirlab.edu" target="_blank">Cerro Tololo Observatory</a></li>
+        <li><a href="https://www.astro.caltech.edu" target="_blank">Caltech Astronomy</a></li>
+        <li><a href="https://www.skatelescope.org" target="_blank">Square Kilometre Array</a></li>
+        <li><a href="https://www.jaxa.jp" target="_blank">JAXA</a></li>
+        <li><a href="https://www.roscosmos.ru" target="_blank">Roscosmos</a></li>
+        <li><a href="https://www.isro.gov.in" target="_blank">ISRO</a></li>
+        <li><a href="https://www.cnsa.gov.cn" target="_blank">CNSA</a></li>
+        <li><a href="https://www.dlr.de" target="_blank">DLR</a></li>
+        <li><a href="https://www.ukri.org" target="_blank">UK Research & Innovation</a></li>
+        <li><a href="https://www.lpl.arizona.edu" target="_blank">Lunar and Planetary Laboratory</a></li>
+        <li><a href="https://www.obs-mip.fr" target="_blank">Observatoire Midi-Pyrénées</a></li>
+        <li><a href="https://www.naoj.org" target="_blank">National Astronomical Observatory of Japan</a></li>
+        <li><a href="https://www.ipac.caltech.edu" target="_blank">IPAC</a></li>
+        <li><a href="https://www.sron.nl" target="_blank">SRON Netherlands Institute</a></li>
+        <li><a href="https://www.maxplanckgesellschaft.de" target="_blank">Max Planck Society</a></li>
+        <li><a href="https://www.cnes.fr" target="_blank">CNES</a></li>
+        <li><a href="https://www.bnl.gov" target="_blank">Brookhaven National Laboratory</a></li>
+        <li><a href="https://www.llnl.gov" target="_blank">Lawrence Livermore National Laboratory</a></li>
+        <li><a href="https://www.nrl.navy.mil" target="_blank">US Naval Research Laboratory</a></li>
+      </ul>
+    `;
+  }
+
+  if(page==="documentation"){
+    content.innerHTML = `
+      <h1>Documentation</h1>
+      <ul>
+        <li><button class="action" onclick="loadPage('qa')">Questions & Answers</button></li>
+        <li><button class="action" onclick="downloadHTML()">Download index.html</button></li>
+      </ul>
+    `;
+  }
+
+  if(page==="qa"){
+    content.innerHTML = `
+      <h1>Questions & Answers</h1>
+      <p><strong>Q:</strong> Who operates the MOP, and under what organization?<br>
+         <strong>A:</strong> The Macro Object Program is operated by the BC Astrophysical Observatory (BCAO), which is directed by The BC. Specifically, James Degenhardt, B-07, and students part of the Computer Science for Astrophysics Program created this database.</p>
+      <p><strong>Q:</strong> When was the Macro Object Program established?<br>
+         <strong>A:</strong> The Minor Planet Center (MPC) was established in 1947.
+It was created to serve as a centralized clearinghouse for observations of macro objects, so that astronomers worldwide could coordinate discoveries, track orbits, and avoid duplicate reporting.</p>
+      <p><strong>Q:</strong> What are Near-Earth Objects (NEOs) and Potentially Hazardous Asteroids (PHAs)?<br>
+         <strong>A:</strong> NEOs are asteroids and comets that approach within 1.3 Astronomical Units (AU) of the Sun.
+PHAs are a subset of NEOs identified as being potentially hazardous due to their size and close approach to Earth's orbit.</p>
+    `;
+  }
+
+  if(page==="publication"){
+    content.innerHTML = `
+      <h1>Publications</h1>
+      <p>Official circulars, bulletins, and object announcements will appear here.</p>
+    `;
+  }
+}
+
+function downloadHTML(){
+  const blob = new Blob([document.documentElement.outerHTML], {type:"text/html"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "index.html";
+  a.click();
+}
+
+loadPage("home");
+</script>
+
+</body>
+</html>
