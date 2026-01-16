@@ -267,7 +267,7 @@ function loadPage(page){
       <ul>
         <li><button class="action" onclick="loadPage('qa')">Questions & Answers</button></li>
         <li><button class="action" onclick="downloadHTML()">Download index.html</button></li>
-        <li><button class="action" onclick="loadPage('origination')">Origination Contributors</button></li>
+        <li><button class="action" onclick="loadPage('origination')">Data</button></li>
       </ul>
     `;
   }
@@ -288,12 +288,12 @@ PHAs are a subset of NEOs identified as being potentially hazardous due to their
 
 
   if(page==="origination"){
-    content.innerHTML = `<h1>Origination Contributors</h1><p id="orig-status">Syncing global data...</p><div id="orig-content"></div>`;
+    content.innerHTML = `<h1>Object Recordations</h1><p id="orig-status">Syncing global data...</p><div id="orig-content"></div>`;
     fetch(`${CLOUDFLARE_WORKER_URL}/discoveries`).then(r=>r.json()).then(data=>{
       document.getElementById("orig-status").style.display="none";
       document.getElementById("orig-content").innerHTML = `
         <div style="background:var(--accent-blue);color:white;padding:20px;border-radius:8px;margin-bottom:30px;">
-          <h2 style="margin-top:0;color:white;">Global Summary</h2>
+          <h2 style="margin-top:0;color:white;">Global Registry</h2>
           <div style="font-size:48px;font-weight:bold;">${data.length}</div>
         </div>
         <table border="1" cellpadding="10" style="width:100%;border-collapse:collapse;">
