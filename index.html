@@ -863,7 +863,7 @@ function handleCanvasClick(e){
   const wx = view.x + mx / view.scale;
   const wy = view.y + my / view.scale;
 
-  const found = findObjectNear(wx, wy, 14 / view.scale);
+  const found = findObjectNear(wx, wy, 55 / view.scale);
   if (found) openObjectPanel(found);
 }
 
@@ -1171,3 +1171,4 @@ $$('.nav-btn').forEach(b=>{
 
 </body>
 </html>
+
